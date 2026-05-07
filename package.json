@@ -8,11 +8,11 @@
   },
 
   "scripts": {
-  "dev": "nuxt",
-  "build": "NODE_OPTIONS=--openssl-legacy-provider nuxt generate",
-  "start": "nuxt start",
-  "generate": "NODE_OPTIONS=--openssl-legacy-provider nuxt generate"
-},
+    "dev": "nuxt",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider nuxt generate",
+    "start": "nuxt start",
+    "generate": "NODE_OPTIONS=--openssl-legacy-provider nuxt generate"
+  },
 
   "dependencies": {
     "@nuxtjs/axios": "^5.13.6",
@@ -32,5 +32,11 @@
     "eslint-config-prettier": "^8.3.0",
     "prettier": "^2.3.2",
     "video.js": "^7.15.4"
+  },
+
+  "config": {
+    "nuxt": {
+      "target": "static"
+    }
   }
 }
