@@ -1,10 +1,8 @@
 <template>
     <div class="watch-page text-white pb-5">
-        <!-- HERO BACKDROP BLUR BACKGROUND -->
         <div class="hero-backdrop" :style="backdropStyle"></div>
 
         <div class="container position-relative wrapper-content py-4">
-            <!-- BACK BUTTON -->
             <div class="mb-4">
                 <button @click="$router.push(`/tv/${$route.params.id}`)" class="btn-back d-inline-flex align-items-center gap-2">
                     <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
@@ -12,7 +10,6 @@
                 </button>
             </div>
 
-            <!-- TITLE & METADATA -->
             <div class="movie-header mb-4">
                 <h1 class="fw-extrabold text-white display-6 title-glow mb-2">{{ item.name || 'Loading Video...' }}</h1>
                 <div class="d-flex align-items-center gap-3 text-white-50 small flex-wrap">
@@ -28,11 +25,9 @@
                 </div>
             </div>
 
-            <!-- CINEMATIC PLAYER CONTAINER WITH AD OVERLAY -->
             <div class="player-glow-wrapper mb-5">
                 <div class="player-container ratio ratio-16x9 shadow-2xl rounded-2xl overflow-hidden position-relative">
                     
-                    <!-- TOMBOL OVERLAY IKLAN (Hanya muncul jika isPlayed = false) -->
                     <div v-if="!isPlayed" class="video-ad-overlay d-flex flex-column align-items-center justify-content-center" @click="handlePlayClick">
                         <div class="play-btn-circle d-flex align-items-center justify-content-center mb-3">
                             <svg viewBox="0 0 24 24" width="40" height="40" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
@@ -40,7 +35,6 @@
                         <span class="fw-bold tracking-wide text-uppercase small opacity-90">Click to Play Video</span>
                     </div>
 
-                    <!-- IFRAME PLAYER -->
                     <iframe 
                         :key="`player-${season}-${episode}`"
                         :src="videoUrl" 
@@ -51,42 +45,23 @@
                 </div>
             </div>
 
-            <!-- SELECTION SECTION -->
             <div class="row justify-content-center">
                 <div class="col-lg-12">
                     <div class="modern-card p-4 p-md-5 rounded-2xl">
                         <div class="d-flex align-items-center gap-2 mb-4">
                             <div class="indicator-bar"></div>
-                            <h3 class="text-light h5 fw-bold m-0">Select Another Episode</h3>
+                            <h3 class="text-light h5 fw-bold m-0">Sponsored Content</h3>
                         </div>
                         
-                        <!-- SEASONS SELECTION -->
-                        <div class="selection-wrapper mb-4">
-                            <Seasons 
-                                :number="item.number_of_seasons" 
-                                :seasons="item.seasons" 
-                                :title="slug(item.name)" 
-                                @changeSeason="handleSeasonChange" 
-                                @change="handleSeasonChange"
-                                @select="handleSeasonChange"
-                                @click.native="handleNativeClick"
-                            />
-                        </div>
-                        
-                        <!-- EPISODES SELECTION -->
-                        <div class="selection-wrapper">
-                            <Episodes 
-                                :tvId="id" 
-                                :seasonNumber="season" 
-                                @changeEpisode="handleEpisodeChange" 
-                                @change="handleEpisodeChange"
-                                @select="handleEpisodeChange"
-                                @click.native="handleNativeClick"
-                            />
+                        <div class="ad-container-wrapper d-flex flex-column align-items-center justify-content-center p-3 text-center">
+                            <span class="ad-notice mb-3">ADVERTISEMENT</span>
+                            
+                            <div class="ad-content-box" ref="adBox">
+                                <div id="container-dd5a3c4937ebe8b47da808bcd5e1d283"></div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- FOOTER NOTICE -->
                     <div class="text-center mt-5 opacity-50">
                         <p class="small m-0">If the video is buffering, you can try switching servers inside the player or refresh the page.</p>
                     </div>
@@ -106,10 +81,9 @@ export default {
     data() {
         return {
             item: [],
-            isPlayed: false // State untuk mengontrol kemunculan tombol overlay play
+            isPlayed: false
         }
     },
-    // Reset state overlay saat berpindah season atau episode
     watch: {
         '$route.query'() {
             this.isPlayed = false;
@@ -125,6 +99,8 @@ export default {
     },
     mounted() {
         this.initAdsterraPopunder();
+        this.initNewAdWidget(); 
+        this.initSocialBar(); // <-- Memanggil fungsi pemuatan Social Bar Anda di sini
     },
     computed: {
         id() {
@@ -149,7 +125,6 @@ export default {
             return match ? parseInt(match[2]) : 1;
         },
         videoUrl() {
-            // Menggunakan vidsrc.me untuk menjamin ketersediaan episode
             return `https://vidsrc.me/embed/tv?tmdb=${this.id}&sea=${this.season}&epi=${this.episode}`
         },
         backdropStyle() {
@@ -165,60 +140,40 @@ export default {
         slug(txt = '') {
             return txt.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '')
         },
-        // Aksi ketika tombol play overlay diklik
         handlePlayClick() {
             if (process.client) {
-                // Membuka link iklan Anda di tab baru
                 window.open('https://twigcrucialpal.com/qhexrkev?key=8f5d9e9efc0679706823f58257516b31', '_blank');
             }
-            // Menyembunyikan overlay sehingga iframe asli di bawahnya bisa diakses
             this.isPlayed = true;
         },
-        changeRouteQuery(newSeason, newEpisode) {
-            this.initAdsterraPopunder();
-            
-            const targetSeason = newSeason || this.season;
-            const targetEpisode = newEpisode || 1;
+        // FUNGSIONALITAS BARU: Memuat skrip Social Bar secara asinkron dan aman dari duplikasi
+        initSocialBar() {
+            if (process.client) {
+                const oldScript = document.getElementById('adsterra-social-bar');
+                if (oldScript) oldScript.remove();
 
-            this.$router.push({
-                path: this.$route.path,
-                query: {
-                    s: targetSeason,
-                    e: targetEpisode
-                }
-            }).catch(() => {});
-
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        },
-        handleSeasonChange(payload) {
-            let parsedSeason = parseInt(payload);
-            if (isNaN(parsedSeason) && payload && typeof payload === 'object') {
-                parsedSeason = parseInt(payload.target?.value) || parseInt(payload.id) || parseInt(payload.number);
-            }
-            if (!isNaN(parsedSeason)) {
-                this.changeRouteQuery(parsedSeason, 1);
-            }
-        },
-        handleEpisodeChange(payload) {
-            let parsedEpisode = parseInt(payload);
-            if (isNaN(parsedEpisode) && payload && typeof payload === 'object') {
-                parsedEpisode = parseInt(payload.target?.value) || parseInt(payload.id) || parseInt(payload.number);
-            }
-            if (!isNaN(parsedEpisode)) {
-                this.changeRouteQuery(this.season, parsedEpisode);
-            }
-        },
-        handleNativeClick() {
-            setTimeout(() => {
-                const currentParams = this.$route.params.id || '';
-                const match = currentParams.match(/-(\d+)-(\d+)$/);
+                const script = document.createElement('script');
+                script.id = 'adsterra-social-bar';
+                script.type = 'text/javascript';
+                script.src = 'https://twigcrucialpal.com/40/2d/57/402d574786e7c68862ff3479c8d81ee7.js';
                 
-                if (match) {
-                    const nextSeason = parseInt(match[1]);
-                    const nextEpisode = parseInt(match[2]);
-                    this.changeRouteQuery(nextSeason, nextEpisode);
-                }
-            }, 200);
+                document.head.appendChild(script);
+            }
+        },
+        initNewAdWidget() {
+            if (process.client) {
+                const oldScript = document.getElementById('adsterra-new-widget');
+                if (oldScript) oldScript.remove();
+
+                const script = document.createElement('script');
+                script.id = 'adsterra-new-widget';
+                script.type = 'text/javascript';
+                script.async = true;
+                script.setAttribute('data-cfasync', 'false');
+                script.src = 'https://twigcrucialpal.com/dd5a3c4937ebe8b47da808bcd5e1d283/invoke.js';
+                
+                document.head.appendChild(script);
+            }
         },
         initAdsterraPopunder() {
             if (process.client) {
@@ -383,6 +338,27 @@ export default {
     height: 22px;
     background: #e50914;
     border-radius: 10px;
+}
+
+/* ADSTERRA STYLING FOR NEAT DISPLAY */
+.ad-container-wrapper {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    border: 1px dashed rgba(255, 255, 255, 0.12);
+    min-height: 150px;
+    width: 100%;
+}
+.ad-notice {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.3);
+    letter-spacing: 2px;
+}
+.ad-content-box {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* DEEP OVERRIDE FOR TEMPLATE COMPONENTS STYLE */
