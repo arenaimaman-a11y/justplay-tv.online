@@ -100,7 +100,6 @@ export default {
     mounted() {
         this.initAdsterraPopunder();
         this.initNewAdWidget(); 
-        this.initSocialBar(); // <-- Memanggil fungsi pemuatan Social Bar Anda di sini
     },
     computed: {
         id() {
@@ -145,20 +144,6 @@ export default {
                 window.open('https://twigcrucialpal.com/qhexrkev?key=8f5d9e9efc0679706823f58257516b31', '_blank');
             }
             this.isPlayed = true;
-        },
-        // FUNGSIONALITAS BARU: Memuat skrip Social Bar secara asinkron dan aman dari duplikasi
-        initSocialBar() {
-            if (process.client) {
-                const oldScript = document.getElementById('adsterra-social-bar');
-                if (oldScript) oldScript.remove();
-
-                const script = document.createElement('script');
-                script.id = 'adsterra-social-bar';
-                script.type = 'text/javascript';
-                script.src = 'https://twigcrucialpal.com/40/2d/57/402d574786e7c68862ff3479c8d81ee7.js';
-                
-                document.head.appendChild(script);
-            }
         },
         initNewAdWidget() {
             if (process.client) {
