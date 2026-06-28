@@ -36,7 +36,7 @@
                     </div>
 
                     <iframe 
-                        :key="`player-${season}-${episode}`"
+                        :key="`player-${id}-${season}-${episode}`"
                         :src="videoUrl" 
                         allowfullscreen
                         scrolling="no"
@@ -85,8 +85,11 @@ export default {
         }
     },
     watch: {
-        '$route.query'() {
-            this.isPlayed = false;
+        '$route.query': {
+            handler() {
+                this.isPlayed = false;
+            },
+            deep: true
         }
     },
     async fetch() {
@@ -100,6 +103,7 @@ export default {
     mounted() {
         this.initAdsterraPopunder();
         this.initNewAdWidget(); 
+        this.initSocialBar();
     },
     computed: {
         id() {
@@ -108,7 +112,7 @@ export default {
             return match ? match[0] : routeId;
         },
         season() {
-            if (this.$route.query.s) {
+            if (this.$route.query && this.$route.query.s !== undefined && this.$route.query.s !== null && this.$route.query.s !== '') {
                 return parseInt(this.$route.query.s);
             }
             const fullPath = this.$route.fullPath || '';
@@ -116,7 +120,7 @@ export default {
             return match ? parseInt(match[1]) : 1;
         },
         episode() {
-            if (this.$route.query.e) {
+            if (this.$route.query && this.$route.query.e !== undefined && this.$route.query.e !== null && this.$route.query.e !== '') {
                 return parseInt(this.$route.query.e);
             }
             const fullPath = this.$route.fullPath || '';
@@ -124,15 +128,16 @@ export default {
             return match ? parseInt(match[2]) : 1;
         },
         videoUrl() {
-            return `https://vidsrc.me/embed/tv?tmdb=${this.id}&sea=${this.season}&epi=${this.episode}`
+            // PERBAIKAN FATAL: Mengubah &sea= menjadi &s= dan &epi= menjadi &e= sesuai dokumentasi resmi Vidsrc.me
+            return `https://vidsrc.me/embed/tv?tmdb=${this.id}&s=${this.season}&e=${this.episode}`
         },
         backdropStyle() {
             if (this.item && this.item.backdrop_path) {
                 return {
-                    backgroundImage: `linear-gradient(to bottom, rgba(20,20,20,0.7) 0%, #141414 100%), url(${mopie.IMAGE_BACKDROP}${this.item.backdrop_path})`
+                    backgroundImage: `linear-gradient(to bottom, rgba(8,9,12,0.7) 0%, #08090c 100%), url(${mopie.IMAGE_BACKDROP}${this.item.backdrop_path})`
                 }
             }
-            return { backgroundColor: '#141414' }
+            return { backgroundColor: '#08090c' }
         }
     },
     methods: {
@@ -144,6 +149,19 @@ export default {
                 window.open('https://twigcrucialpal.com/qhexrkev?key=8f5d9e9efc0679706823f58257516b31', '_blank');
             }
             this.isPlayed = true;
+        },
+        initSocialBar() {
+            if (process.client) {
+                const oldScript = document.getElementById('adsterra-social-bar');
+                if (oldScript) oldScript.remove();
+
+                const script = document.createElement('script');
+                script.id = 'adsterra-social-bar';
+                script.type = 'text/javascript';
+                script.src = 'https://twigcrucialpal.com/40/2d/57/402d574786e7c68862ff3479c8d81ee7.js';
+                
+                document.head.appendChild(script);
+            }
         },
         initNewAdWidget() {
             if (process.client) {
@@ -188,7 +206,7 @@ export default {
 <style scoped>
 /* AMBIENCE DESIGN */
 .watch-page {
-    background-color: #141414;
+    background-color: #08090c; 
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     overflow-x: hidden;
     position: relative;
@@ -213,15 +231,16 @@ export default {
 .play-btn-circle {
     width: 80px;
     height: 80px;
-    background: #e50914;
+    background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%); 
     border-radius: 50%;
-    color: white;
-    box-shadow: 0 0 30px rgba(229, 9, 20, 0.5);
+    color: #08090c; 
+    box-shadow: 0 0 30px rgba(0, 242, 254, 0.4); 
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .video-ad-overlay:hover .play-btn-circle {
     transform: scale(1.15);
-    background: #ff1e27;
+    opacity: 0.95;
+    box-shadow: 0 0 40px rgba(0, 242, 254, 0.6);
 }
 .tracking-wide {
     letter-spacing: 2px;
@@ -261,7 +280,7 @@ export default {
 }
 .btn-back:hover {
     background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.25);
+    border-color: rgba(0, 242, 254, 0.3); 
     color: #ffffff;
     transform: translateX(-3px);
 }
@@ -275,7 +294,8 @@ export default {
     letter-spacing: -0.5px;
 }
 .badge-custom {
-    background: linear-gradient(45deg, #e50914, #ff3838);
+    background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%); 
+    color: #08090c; 
     font-size: 0.7rem;
     font-weight: 800;
     padding: 5px 12px;
@@ -298,7 +318,7 @@ export default {
     left: 2%;
     width: 96%;
     height: 90%;
-    background: rgba(229, 9, 20, 0.15);
+    background: rgba(0, 242, 254, 0.12); 
     filter: blur(60px);
     z-index: -1;
     border-radius: 20px;
@@ -312,7 +332,7 @@ export default {
 
 /* THE CONTAINER CARD FOR SEASONS/EPISODES */
 .modern-card {
-    background: rgba(24, 24, 24, 0.75) !important;
+    background: rgba(13, 17, 23, 0.75) !important; 
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border: 1px solid rgba(255, 255, 255, 0.05) !important;
@@ -321,7 +341,7 @@ export default {
 .indicator-bar {
     width: 4px;
     height: 22px;
-    background: #e50914;
+    background: #00f2fe; 
     border-radius: 10px;
 }
 
