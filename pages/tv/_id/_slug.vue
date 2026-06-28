@@ -6,7 +6,7 @@
             
             <div class="container h-100 position-relative z-2 d-flex align-items-center justify-content-center pt-5 pb-3">
                 <div class="col-lg-9 col-xl-8">
-                    <div class="glass-synopsis-card p-4 p-md-5 rounded-4 shadow-lg border border-glass">
+                    <div class="glass-synopsis-card p-4 p-md-5">
                         <div class="d-flex align-items-center gap-2 mb-2">
                             <span class="badge badge-neon-cyan text-uppercase fw-bold text-xs tracking-wider">Series Info</span>
                             <span class="text-muted text-xs">•</span>
@@ -233,11 +233,11 @@ export default {
     background: linear-gradient(180deg, rgba(8,9,12,0.1) 0%, rgba(8,9,12,0.6) 60%, #08090c 100%); 
 }
 .glass-synopsis-card {
-    background-color: rgba(13, 17, 23, 0.75); /* Ditambahkan kepekatan agar teks deskripsi tetap sangat terbaca */
-    backdrop-filter: blur(2px); /* PERUBAHAN: Blur diturunkan drastis ke 2px agar gambar belakang terlihat jelas */
-    -webkit-backdrop-filter: blur(2px);
+    background-color: transparent; /* Kotak hitam dirubah menjadi transparan total */
+    backdrop-filter: none;          /* Efek blur dihapus total */
+    -webkit-backdrop-filter: none;  /* Efek blur safari dihapus total */
 }
-.border-glass { border: 1px solid rgba(255, 255, 255, 0.08) !important; }
+.border-glass { border: none !important; } /* Garis tepi kotak dihapus */
 .border-glass-dim { border: 1px solid rgba(255, 255, 255, 0.04) !important; }
 
 /* Typo Premium */
