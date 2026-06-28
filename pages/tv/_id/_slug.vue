@@ -1,11 +1,9 @@
 <template>
     <div :key="$route.params.slug" class="bg-streaming text-light min-vh-100 pb-5">
         
-        <!-- 1. MODERN CINEMATIC HERO + SINOPSIS & COMPACT PLAY BUTTON -->
         <div class="hero-container position-relative mb-4" :style="{ backgroundImage: `url(${backdrop})` }">
             <div class="hero-gradient-overlay position-absolute w-100 h-100"></div>
             
-            <!-- Frosted Glass Synopsis Card -->
             <div class="container h-100 position-relative z-2 d-flex align-items-center justify-content-center pt-5 pb-3">
                 <div class="col-lg-9 col-xl-8">
                     <div class="glass-synopsis-card p-4 p-md-5 rounded-4 shadow-lg border border-glass">
@@ -14,46 +12,40 @@
                             <span class="text-muted text-xs">•</span>
                             <span class="text-muted text-xs fw-medium">{{ year }}</span>
                         </div>
-                        <h1 class="hero-title mb-2 text-tracking-tight">{{ item.name }}</h1>
-                        <p class="hero-overview leading-relaxed text-justify mb-4 opacity-85">
-                            {{ item.overview || 'No overview available for this show.' }}
-                        </p>
+                        <h1 class="hero-title mb-3 text-tracking-tight">{{ item.name }}</h1>
                         
-                        <!-- TOMBOL WATCH NOW UTAMA MERAPAT KE ATAS -->
-                        <div class="d-inline-block">
-                            <button @click="goToWatchPage" class="btn btn-neon-action text-xs fw-bold text-uppercase py-2.5 px-4 rounded-3 d-flex align-items-center gap-2">
-                                <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        <div class="d-inline-block mb-4">
+                            <button @click="goToWatchPage" class="btn btn-neon-action text-sm fw-bold text-uppercase py-3 px-5 rounded-3 d-flex align-items-center gap-3">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
                                 WATCH S{{ activeSeason }}E{{ activeEpisode }} NOW
                             </button>
                         </div>
+
+                        <p class="hero-overview leading-relaxed text-justify mb-0 opacity-85">
+                            {{ item.overview || 'No overview available for this show.' }}
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- MAIN CONTAINER -->
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-9 col-xl-8">
 
-                    <!-- 2. PREMIUM CONTENT SELECTOR BOX -->
                     <div class="content-box-premium p-4 rounded-4 mb-4 border border-glass-dim shadow-sm">
                         
-                        <!-- KOTAK WRAPPER SEASON DENGAN ANTI-MELAR ABSOLUT -->
                         <div class="jw-season-box-container p-3 rounded-3 mb-4 border border-glass-dim overflow-hidden">
                             <div class="d-flex align-items-center justify-content-between mb-3">
                                 <h2 class="box-section-title text-uppercase mb-0">Select Season</h2>
                                 <span class="text-muted text-xs opacity-50 fw-medium">Swipe to scroll</span>
                             </div>
 
-                            <!-- Struktur Pengunci Grid Presisi -->
                             <div class="season-slider-layout">
-                                <!-- Tombol Kiri -->
                                 <button @click="scrollSeasons('left')" class="slider-glide-btn btn-left" aria-label="Scroll left">
                                     <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="15 18 9 12 15 6"></polyline></svg>
                                 </button>
 
-                                <!-- Jalur Scroll Utama (Dikunci Total) -->
                                 <div ref="seasonContainer" class="season-slider-wrapper no-scrollbar">
                                     <div class="season-scroll-content">
                                         <button 
@@ -68,14 +60,12 @@
                                     </div>
                                 </div>
 
-                                <!-- Tombol Kanan -->
                                 <button @click="scrollSeasons('right')" class="slider-glide-btn btn-right" aria-label="Scroll right">
                                     <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg>
                                 </button>
                             </div>
                         </div>
 
-                        <!-- 3. VERTICAL LIST EPISODE -->
                         <div class="d-flex align-items-center justify-content-between mb-3 px-1">
                             <h2 class="box-section-title text-uppercase mb-0">Episodes List</h2>
                             <span class="text-muted text-xs fw-semibold opacity-50">{{ episodesList.length }} Episodes</span>
@@ -108,7 +98,6 @@
                         </div>
                     </div>
 
-                    <!-- EXTRA FOOTER CAROUSELS -->
                     <div class="border-top border-glass-dim pt-4 mt-4">
                         <Casts :id="id" :type="'tv'" class="mb-5" />
                         <Recommendations :id="id" :type="'tv'" />
@@ -244,37 +233,38 @@ export default {
     background: linear-gradient(180deg, rgba(8,9,12,0.1) 0%, rgba(8,9,12,0.6) 60%, #08090c 100%); 
 }
 .glass-synopsis-card {
-    background-color: rgba(13, 17, 23, 0.45);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background-color: rgba(13, 17, 23, 0.75); /* Ditambahkan kepekatan agar teks deskripsi tetap sangat terbaca */
+    backdrop-filter: blur(2px); /* PERUBAHAN: Blur diturunkan drastis ke 2px agar gambar belakang terlihat jelas */
+    -webkit-backdrop-filter: blur(2px);
 }
-.border-glass { border: 1px solid rgba(255, 255, 255, 0.06) !important; }
+.border-glass { border: 1px solid rgba(255, 255, 255, 0.08) !important; }
 .border-glass-dim { border: 1px solid rgba(255, 255, 255, 0.04) !important; }
 
 /* Typo Premium */
 .hero-title { font-size: 2.25rem; font-weight: 800; letter-spacing: -0.03em; color: #ffffff; }
 .hero-overview { font-size: 0.95rem; color: #cbd5e1; line-height: 1.6; }
 .text-xs { font-size: 0.75rem; }
+.text-sm { font-size: 0.85rem; } 
 .text-tracking-tight { letter-spacing: -0.02em; }
 .tracking-wider { letter-spacing: 0.08em; }
 .badge-neon-cyan { background-color: rgba(0, 242, 254, 0.1); color: #00f2fe; padding: 5px 10px; border-radius: 6px; }
 
-/* Button Play */
+/* Button Play (Tetap Besar) */
 .btn-neon-action {
     background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
     color: #08090c;
     border: none;
-    box-shadow: 0 4px 15px rgba(0, 242, 254, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 242, 254, 0.25);
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 .btn-neon-action:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(0, 242, 254, 0.4);
+    transform: translateY(-2px); 
+    box-shadow: 0 6px 25px rgba(0, 242, 254, 0.45);
     opacity: 0.95;
 }
 
 /* =========================================================
-   2. ANTI-MELAR SEASON SLIDER SYSTEM (PERBAIKAN TOTAL MUTLAK)
+   2. ANTI-MELAR SEASON SLIDER SYSTEM
    ========================================================= */
 .content-box-premium {
     background-color: #0d1117;
@@ -282,13 +272,11 @@ export default {
 }
 .box-section-title { font-size: 0.8rem; color: #64748b; font-weight: 700; letter-spacing: 0.1em; }
 
-/* Wadah Utama */
 .jw-season-box-container {
     background-color: rgba(255, 255, 255, 0.015);
     width: 100%;
 }
 
-/* Mengunci layout baris menggunakan CSS Grid murni */
 .season-slider-layout {
     display: grid;
     grid-template-columns: auto 1fr auto;
@@ -296,28 +284,24 @@ export default {
     width: 100%;
 }
 
-/* Memaksa area scroll tetap pada ukurannya dan membuang elemen meluber */
 .season-slider-wrapper {
     overflow-x: auto;
     overflow-y: hidden;
     width: 100%;
-    display: block; /* Menghilangkan efek flexbox yang merusak layout mobile */
-    -webkit-overflow-scrolling: touch; /* Mengaktifkan smooth swipe gesture di iPhone/Android */
+    display: block;
+    -webkit-overflow-scrolling: touch;
 }
 
-/* Konten internal horizontal */
 .season-scroll-content {
     display: inline-flex;
     gap: 8px;
     padding: 2px 0;
-    white-space: nowrap; /* Mencegah tombol turun ke bawah */
+    white-space: nowrap;
 }
 
-/* Menyembunyikan Scrollbar standard di semua browser */
 .no-scrollbar::-webkit-scrollbar { display: none !important; }
 .no-scrollbar { -ms-overflow-style: none !important; scrollbar-width: none !important; }
 
-/* Tombol Season Modis */
 .season-glide-tab {
     display: inline-block;
     background: transparent;
@@ -337,7 +321,6 @@ export default {
     font-weight: 700;
 }
 
-/* Tombol Panah Navigasi */
 .slider-glide-btn {
     background: rgba(255, 255, 255, 0.02);
     border: 1px solid rgba(255, 255, 255, 0.04);
@@ -353,7 +336,6 @@ export default {
 }
 .slider-glide-btn:hover { color: #ffffff; background-color: rgba(255, 255, 255, 0.08); }
 
-/* Pengondisian ketat untuk HP */
 @media (max-width: 576px) {
     .season-glide-tab {
         font-size: 0.82rem;
