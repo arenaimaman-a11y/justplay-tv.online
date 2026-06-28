@@ -101,9 +101,9 @@ export default {
         this.item = await this.$axios.$get(`tv/${this.id}`, { params: params })
     },
     mounted() {
+        // Hanya memuat Popunder dan Iklan Banner bawaan Anda
         this.initAdsterraPopunder();
         this.initNewAdWidget(); 
-        this.initSocialBar();
     },
     computed: {
         id() {
@@ -128,7 +128,6 @@ export default {
             return match ? parseInt(match[2]) : 1;
         },
         videoUrl() {
-            // PERBAIKAN FATAL: Mengubah &sea= menjadi &s= dan &epi= menjadi &e= sesuai dokumentasi resmi Vidsrc.me
             return `https://vidsrc.me/embed/tv?tmdb=${this.id}&s=${this.season}&e=${this.episode}`
         },
         backdropStyle() {
@@ -149,19 +148,6 @@ export default {
                 window.open('https://twigcrucialpal.com/qhexrkev?key=8f5d9e9efc0679706823f58257516b31', '_blank');
             }
             this.isPlayed = true;
-        },
-        initSocialBar() {
-            if (process.client) {
-                const oldScript = document.getElementById('adsterra-social-bar');
-                if (oldScript) oldScript.remove();
-
-                const script = document.createElement('script');
-                script.id = 'adsterra-social-bar';
-                script.type = 'text/javascript';
-                script.src = 'https://twigcrucialpal.com/40/2d/57/402d574786e7c68862ff3479c8d81ee7.js';
-                
-                document.head.appendChild(script);
-            }
         },
         initNewAdWidget() {
             if (process.client) {
