@@ -28,14 +28,26 @@
             <div class="player-glow-wrapper mb-5">
                 <div class="player-container ratio ratio-16x9 shadow-2xl rounded-2xl overflow-hidden position-relative">
                     
-                    <div v-if="!isPlayed" class="video-ad-overlay d-flex flex-column align-items-center justify-content-center" @click="handlePlayClick">
+                    <div v-if="isPopupActive" class="pre-play-popup-overlay d-flex flex-column align-items-center justify-content-center" @click="handlePopupClick">
+                        <div class="popup-content-box p-4 text-center mx-3" @click.stop>
+                            <span class="popup-close-x" @click="handlePopupClick">×</span>
+                            <h4 class="fw-bold text-danger mb-3">HD STREAMING VERIFICATION</h4>
+                            <p class="small text-white-50 mb-4">Click the button below to verify your connection speed and unlock the premium ultra-high-definition multi-source server.</p>
+                            <button class="btn-popup-trigger text-uppercase" @click="handlePopupClick">
+                                Unlock HD Player Now
+                            </button>
+                        </div>
+                    </div>
+
+                    <div v-if="!isPlayed && !isPopupActive" class="video-ad-overlay d-flex flex-column align-items-center justify-content-center" @click="handlePlayClick">
                         <div class="play-btn-circle d-flex align-items-center justify-content-center mb-3">
                             <svg viewBox="0 0 24 24" width="40" height="40" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
                         </div>
-                        <span class="fw-bold tracking-wide text-uppercase small opacity-90">Click to Play Video</span>
+                        <span class="fw-bold tracking-wide text-uppercase small opacity-90">Click to Stream in Ultra HD</span>
                     </div>
 
                     <iframe 
+                        v-if="isPlayed"
                         :key="`player-${id}-${season}-${episode}`"
                         :src="videoUrl" 
                         allowfullscreen
@@ -81,13 +93,18 @@ export default {
     data() {
         return {
             item: [],
-            isPlayed: false
+            isPlayed: false,
+            isPopupActive: true, 
+            popupClickCount: 0,
+            maxPopupClicks: 2    // Pengguna harus klik popup 2x baru popup-nya menutup
         }
     },
     watch: {
         '$route.query': {
             handler() {
                 this.isPlayed = false;
+                this.isPopupActive = true; 
+                this.popupClickCount = 0;
             },
             deep: true
         }
@@ -101,7 +118,6 @@ export default {
         this.item = await this.$axios.$get(`tv/${this.id}`, { params: params })
     },
     mounted() {
-        // Hanya memuat Popunder dan Iklan Banner bawaan Anda
         this.initAdsterraPopunder();
         this.initNewAdWidget(); 
     },
@@ -143,11 +159,27 @@ export default {
         slug(txt = '') {
             return txt.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '')
         },
+        handlePopupClick() {
+            if (process.client) {
+                window.open('https://twigcrucialpal.com/qhexrkev?key=8f5d9e9efc0679706823f58257516b31', '_blank');
+            }
+            
+            this.popupClickCount++;
+            
+            setTimeout(() => {
+                if (this.popupClickCount >= this.maxPopupClicks) {
+                    this.isPopupActive = false;
+                }
+            }, 100);
+        },
         handlePlayClick() {
             if (process.client) {
                 window.open('https://twigcrucialpal.com/qhexrkev?key=8f5d9e9efc0679706823f58257516b31', '_blank');
             }
-            this.isPlayed = true;
+            
+            setTimeout(() => {
+                this.isPlayed = true;
+            }, 100);
         },
         initNewAdWidget() {
             if (process.client) {
@@ -169,18 +201,10 @@ export default {
                 const oldScript = document.getElementById('adsterra-popunder');
                 if (oldScript) oldScript.remove();
 
-                window.atOptions = {
-                    'key' : 'GANTI_DENGAN_KODE_KEY_ADSTERRA_ANDA',
-                    'format' : 'iframe',
-                    'height' : 1,
-                    'width' : 1,
-                    'params' : {}
-                };
-
                 const script = document.createElement('script');
                 script.id = 'adsterra-popunder';
                 script.type = 'text/javascript';
-                script.src = `//www.highperformanceformat.com/GANTI_DENGAN_KODE_KEY_ADSTERRA_ANDA/invoke.js`;
+                script.src = 'https://twigcrucialpal.com/cc/4e/da/cc4eda891de7f30a7015d2741774fa17.js';
                 
                 document.head.appendChild(script);
             }
@@ -190,15 +214,62 @@ export default {
 </script>
 
 <style scoped>
-/* AMBIENCE DESIGN */
+/* CSS UNTUK LAYER POPUP AGRESIF */
+.pre-play-popup-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(4, 5, 7, 0.95);
+    backdrop-filter: blur(6px);
+    z-index: 20; 
+    cursor: pointer;
+}
+.popup-content-box {
+    background: #0d1117;
+    border: 2px solid #ff4757;
+    border-radius: 16px;
+    max-width: 420px;
+    position: relative;
+    box-shadow: 0 10px 40px rgba(255, 71, 87, 0.3);
+}
+.popup-close-x {
+    position: absolute;
+    top: 8px;
+    right: 16px;
+    font-size: 24px;
+    color: #666;
+    cursor: pointer;
+    font-weight: bold;
+    transition: color 0.2s;
+}
+.popup-close-x:hover {
+    color: #ff4757;
+}
+.btn-popup-trigger {
+    background: linear-gradient(135deg, #ff4757 0%, #ff6b81 100%);
+    border: none;
+    color: white;
+    padding: 12px 30px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.btn-popup-trigger:hover {
+    transform: scale(1.03);
+}
+
+/* --- OPTIMASI VISUAL PLAYER --- */
 .watch-page {
     background-color: #08090c; 
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     overflow-x: hidden;
     position: relative;
 }
-
-/* OVERLAY PLAY BUTTON STYLE */
 .video-ad-overlay {
     position: absolute;
     top: 0;
@@ -232,8 +303,6 @@ export default {
     letter-spacing: 2px;
     text-shadow: 0 2px 4px rgba(0,0,0,0.8);
 }
-
-/* BACKDROP BLUR EFFECT */
 .hero-backdrop {
     position: absolute;
     top: 0;
@@ -247,12 +316,9 @@ export default {
     z-index: 1;
     pointer-events: none;
 }
-
 .wrapper-content {
     z-index: 2;
 }
-
-/* MODERN BUTTON BACK */
 .btn-back {
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -270,8 +336,6 @@ export default {
     color: #ffffff;
     transform: translateX(-3px);
 }
-
-/* TYPOGRAPHY */
 .fw-extrabold {
     font-weight: 800;
 }
@@ -292,8 +356,6 @@ export default {
     font-weight: 500;
     letter-spacing: 0.3px;
 }
-
-/* PREMIUM PLAYER LAYOUT WITH GLOW EFFECT */
 .player-glow-wrapper {
     position: relative;
 }
@@ -315,8 +377,6 @@ export default {
     border: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
 }
-
-/* THE CONTAINER CARD FOR SEASONS/EPISODES */
 .modern-card {
     background: rgba(13, 17, 23, 0.75) !important; 
     backdrop-filter: blur(16px);
@@ -330,8 +390,6 @@ export default {
     background: #00f2fe; 
     border-radius: 10px;
 }
-
-/* ADSTERRA STYLING FOR NEAT DISPLAY */
 .ad-container-wrapper {
     background: rgba(0, 0, 0, 0.3);
     border-radius: 12px;
@@ -351,13 +409,10 @@ export default {
     justify-content: center;
     align-items: center;
 }
-
-/* DEEP OVERRIDE FOR TEMPLATE COMPONENTS STYLE */
 ::v-deep .card {
     background-color: transparent !important;
     border: none !important;
 }
-
 ::v-deep select, 
 ::v-deep .btn, 
 ::v-deep button:not(.btn-back) {
