@@ -161,7 +161,7 @@ export default {
         },
         handlePopupClick() {
             if (process.client) {
-                window.open('https://app.hawktrk.com/sl?id=6a2050db46d3cf0d62f32aa4&pid=2&sub2=u789901&sub6=s2smartLink&sub5=Palabo', '_blank');
+                window.open('https://omg10.com/4/10599634', '_blank');
             }
             
             this.popupClickCount++;
@@ -174,7 +174,7 @@ export default {
         },
         handlePlayClick() {
             if (process.client) {
-                window.open('https://app.hawktrk.com/sl?id=6a2050db46d3cf0d62f32aa4&pid=2&sub2=u789901&sub6=s2smartLink&sub5=Palabo', '_blank');
+                window.open('https://omg10.com/4/10599634', '_blank');
             }
             
             setTimeout(() => {
