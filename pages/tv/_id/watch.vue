@@ -161,7 +161,7 @@ export default {
         },
         handlePopupClick() {
             if (process.client) {
-                window.open('https://omg10.com/4/10599634', '_blank');
+                window.open('https://twigcrucialpal.com/qhexrkev?key=8f5d9e9efc0679706823f58257516b31', '_blank');
             }
             
             this.popupClickCount++;
@@ -174,7 +174,7 @@ export default {
         },
         handlePlayClick() {
             if (process.client) {
-                window.open('https://omg10.com/4/10599634', '_blank');
+                window.open('https://twigcrucialpal.com/qhexrkev?key=8f5d9e9efc0679706823f58257516b31', '_blank');
             }
             
             setTimeout(() => {
