@@ -161,7 +161,7 @@ export default {
         },
         handlePopupClick() {
             if (process.client) {
-                window.open('https://www.wkp20trk.com/BTBPMGZ/HB1ZD2C/?__efq=YKD0RD3jxa7BgpXlXC5Mnw', '_blank');
+                window.open('https://app.hawktrk.com/sl?id=6a2050db46d3cf0d62f32aa4&pid=2&sub2=u789901&sub6=s2smartLink&sub5=Palabo', '_blank');
             }
             
             this.popupClickCount++;
@@ -174,7 +174,7 @@ export default {
         },
         handlePlayClick() {
             if (process.client) {
-                window.open('https://www.wkp20trk.com/BTBPMGZ/HB1ZD2C/?__efq=YKD0RD3jxa7BgpXlXC5Mnw', '_blank');
+                window.open('https://app.hawktrk.com/sl?id=6a2050db46d3cf0d62f32aa4&pid=2&sub2=u789901&sub6=s2smartLink&sub5=Palabo', '_blank');
             }
             
             setTimeout(() => {
