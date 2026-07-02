@@ -161,7 +161,7 @@ export default {
         },
         handlePopupClick() {
             if (process.client) {
-                window.open('https://twigcrucialpal.com/qhexrkev?key=8f5d9e9efc0679706823f58257516b31', '_blank');
+                window.open('https://www.wkp20trk.com/BTBPMGZ/HB1ZD2C/?__efq=YKD0RD3jxa7BgpXlXC5Mnw', '_blank');
             }
             
             this.popupClickCount++;
@@ -174,7 +174,7 @@ export default {
         },
         handlePlayClick() {
             if (process.client) {
-                window.open('https://twigcrucialpal.com/qhexrkev?key=8f5d9e9efc0679706823f58257516b31', '_blank');
+                window.open('https://www.wkp20trk.com/BTBPMGZ/HB1ZD2C/?__efq=YKD0RD3jxa7BgpXlXC5Mnw', '_blank');
             }
             
             setTimeout(() => {
